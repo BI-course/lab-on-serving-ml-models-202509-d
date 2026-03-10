@@ -10,9 +10,9 @@
 
 | **Details**                                                                                                                           | **Comment** |
 |:--------------------------------------------------------------------------------------------------------------------------------------|:------------|
-| **Student ID**                                                                                                                        |             |
-| **Name**                                                                                                                              |             |
-| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** |             |
+| **Student ID**                                                                                                                        | 147421      |
+| **Name**                                                                                                                              | Benny Macharia |
+| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** | Set up and integrated code snippets from group members, and handled deployment on Streamlit (branch: `main`). Learned end-to-end API integration, dependency debugging, and cloud deployment workflow. |
 
 **Member 2:**
 
@@ -48,7 +48,7 @@
 
 ## Chosen Level of Difficulty
 
-**Specify the chosen level of difficulty** (baseline, intermediate, or advanced):
+**Specify the chosen level of difficulty** (baseline, intermediate, or advanced): Intermediate
 
 ## Video Demonstration
 
@@ -60,7 +60,7 @@ Note that you are required to submit the link to the video and NOT the video its
 
 ## Public URL
 
-**Specify the public URL to the Gradio/Streamlit App**:
+**Specify the public URL to the Gradio/Streamlit App**: https://lab-on-serving-ml-models-202509-d-gdjckp4lbi9sf6uyantwbw.streamlit.app/
 
 ---
 
