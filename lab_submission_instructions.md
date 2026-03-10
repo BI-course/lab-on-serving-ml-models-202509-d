@@ -12,7 +12,7 @@
 |:--------------------------------------------------------------------------------------------------------------------------------------|:------------|
 | **Student ID**                                                                                                                        | 147421      |
 | **Name**                                                                                                                              | Benny Macharia |
-| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** | Set up and integrated code snippets from group members, and handled deployment on Streamlit (branch: `main`). Learned end-to-end API integration, dependency debugging, and cloud deployment workflow. |
+| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** | Set up and integrated code snippets from group members, and handled deployment on Streamlit (branch: `main`). Learned end-to-end API integration, dependency debugging and deployment. |
 
 **Member 2:**
 
