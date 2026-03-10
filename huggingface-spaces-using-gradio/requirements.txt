@@ -1,5 +1,4 @@
 gradio
-numpy
-scikit-learn
-flask
+numpy<2.2
+scikit-learn==1.7.0
 joblib
