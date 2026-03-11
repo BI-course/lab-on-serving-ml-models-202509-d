@@ -18,9 +18,9 @@
 
 | **Details**                                                                                                                           | **Comment** |
 |:--------------------------------------------------------------------------------------------------------------------------------------|:------------|
-| **Student ID**                                                                                                                        |             |
-| **Name**                                                                                                                              |             |
-| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** |             |
+| **Student ID**                                                                                                                        |      146898       |
+| **Name**                                                                                                                              | Derek Leiro |
+| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** | Added remaining files for Naive Bayes, random forest, recommender model and SVM, deployed to streamlit under (branch: `main`). I learned deploying models to both gradio and streamlit, and how a flask frontend can be able to interact with ML models. |
 
 **Member 3:**
 
