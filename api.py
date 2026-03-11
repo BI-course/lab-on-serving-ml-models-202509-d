@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import json
 # Cross-Origin Resource Sharing (CORS)
 # Modern browsers apply the "same-origin policy", which blocks web pages from
 # making requests to a different origin than the one that served the page.
@@ -51,6 +52,22 @@ CORS(
 decisiontree_classifier_baseline = joblib.load('./model/decisiontree_classifier_baseline.pkl')
 decisiontree_regressor_optimum = joblib.load('./model/decisiontree_regressor_optimum.pkl')
 label_encoders_1b = joblib.load('./model/label_encoders_1b.pkl')
+
+# Load additional classifiers for the Online Shoppers Purchasing Intention dataset
+naive_bayes_classifier = joblib.load('./model/naive_Bayes_classifier_optimum.pkl')
+svm_classifier = joblib.load('./model/support_vector_classifier_optimum.pkl')
+random_forest_classifier = joblib.load('./model/random_forest_classifier_optimum.pkl')
+
+# Load encoders and scalers for the classifiers
+label_encoders_2 = joblib.load('./model/label_encoders_2.pkl')  # For Naive Bayes
+label_encoders_4 = joblib.load('./model/label_encoders_4.pkl')  # For SVM
+label_encoders_5 = joblib.load('./model/label_encoders_5.pkl')  # For Random Forest
+scaler_4 = joblib.load('./model/scaler_4.pkl')  # For SVM
+scaler_5 = joblib.load('./model/scaler_5.pkl')  # For Random Forest
+
+# Load association rules for the product recommender
+with open('./rules/association_rules_groceries.json', 'r') as f:
+    association_rules = json.load(f)
 
 # Defines an HTTP endpoint
 @app.route('/api/v1/models/decision-tree-classifier/predictions', methods=['POST'])
@@ -204,6 +221,216 @@ def predict_decision_tree_regressor():
 #     -Method POST `
 #     -Body $body `
 #     -ContentType "application/json"
+
+# =============================================================================
+# Online Shoppers Purchasing Intention Dataset Classifiers
+# Features: Administrative, Administrative_Duration, Informational,
+#           Informational_Duration, ProductRelated, ProductRelated_Duration,
+#           BounceRates, ExitRates, PageValues, SpecialDay, Month,
+#           OperatingSystems, Browser, Region, TrafficType, VisitorType, Weekend
+# Target: Revenue (0 = No purchase, 1 = Purchase)
+# =============================================================================
+
+# Define expected features for Online Shoppers dataset (same order as training)
+ONLINE_SHOPPERS_FEATURES = [
+    'Administrative', 'Administrative_Duration', 'Informational',
+    'Informational_Duration', 'ProductRelated', 'ProductRelated_Duration',
+    'BounceRates', 'ExitRates', 'PageValues', 'SpecialDay', 'Month',
+    'OperatingSystems', 'Browser', 'Region', 'TrafficType', 'VisitorType', 'Weekend'
+]
+
+# Categorical columns that need encoding
+CATEGORICAL_COLS = ['Month', 'VisitorType', 'Weekend']
+
+
+@app.route('/api/v1/models/naive-bayes-classifier/predictions', methods=['POST'])
+def predict_naive_bayes():
+    """Naive Bayes classifier for Online Shoppers Purchasing Intention"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No input data provided'}), 400
+
+        # Check for missing required fields
+        missing = [f for f in ONLINE_SHOPPERS_FEATURES if f not in data]
+        if missing:
+            return jsonify({'error': f'Missing required fields: {missing}'}), 400
+
+        # Create DataFrame from input
+        new_data = pd.DataFrame([data])
+
+        # Encode categorical columns using label_encoders_2
+        for col in CATEGORICAL_COLS:
+            new_data[col] = label_encoders_2[col].transform(new_data[col])
+
+        # Reorder columns to match training order
+        new_data = new_data[ONLINE_SHOPPERS_FEATURES]
+
+        # Make prediction
+        prediction = naive_bayes_classifier.predict(new_data)[0]
+
+        return jsonify({
+            'model': 'Naive Bayes Classifier',
+            'prediction': int(prediction),
+            'interpretation': 'Purchase' if prediction == 1 else 'No Purchase'
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# Sample cURL for Naive Bayes:
+# curl -X POST http://127.0.0.1:5000/api/v1/models/naive-bayes-classifier/predictions \
+#   -H "Content-Type: application/json" \
+#   -d '{"Administrative": 2, "Administrative_Duration": 50.0, "Informational": 0, "Informational_Duration": 0.0, "ProductRelated": 20, "ProductRelated_Duration": 400.0, "BounceRates": 0.02, "ExitRates": 0.05, "PageValues": 0.0, "SpecialDay": 0.0, "Month": "Nov", "OperatingSystems": 2, "Browser": 1, "Region": 1, "TrafficType": 2, "VisitorType": "Returning_Visitor", "Weekend": "False"}'
+
+
+@app.route('/api/v1/models/svm-classifier/predictions', methods=['POST'])
+def predict_svm():
+    """Support Vector Machine classifier for Online Shoppers Purchasing Intention"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No input data provided'}), 400
+
+        # Check for missing required fields
+        missing = [f for f in ONLINE_SHOPPERS_FEATURES if f not in data]
+        if missing:
+            return jsonify({'error': f'Missing required fields: {missing}'}), 400
+
+        # Create DataFrame from input
+        new_data = pd.DataFrame([data])
+
+        # Encode categorical columns using label_encoders_4
+        for col in CATEGORICAL_COLS:
+            new_data[col] = label_encoders_4[col].transform(new_data[col])
+
+        # Reorder columns to match training order
+        new_data = new_data[ONLINE_SHOPPERS_FEATURES]
+
+        # Scale features using scaler_4
+        new_data_scaled = scaler_4.transform(new_data)
+
+        # Make prediction
+        prediction = svm_classifier.predict(new_data_scaled)[0]
+
+        return jsonify({
+            'model': 'Support Vector Machine Classifier',
+            'prediction': int(prediction),
+            'interpretation': 'Purchase' if prediction == 1 else 'No Purchase'
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# Sample cURL for SVM:
+# curl -X POST http://127.0.0.1:5000/api/v1/models/svm-classifier/predictions \
+#   -H "Content-Type: application/json" \
+#   -d '{"Administrative": 2, "Administrative_Duration": 50.0, "Informational": 0, "Informational_Duration": 0.0, "ProductRelated": 20, "ProductRelated_Duration": 400.0, "BounceRates": 0.02, "ExitRates": 0.05, "PageValues": 0.0, "SpecialDay": 0.0, "Month": "Nov", "OperatingSystems": 2, "Browser": 1, "Region": 1, "TrafficType": 2, "VisitorType": "Returning_Visitor", "Weekend": "False"}'
+
+
+@app.route('/api/v1/models/random-forest-classifier/predictions', methods=['POST'])
+def predict_random_forest():
+    """Random Forest classifier for Online Shoppers Purchasing Intention"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No input data provided'}), 400
+
+        # Check for missing required fields
+        missing = [f for f in ONLINE_SHOPPERS_FEATURES if f not in data]
+        if missing:
+            return jsonify({'error': f'Missing required fields: {missing}'}), 400
+
+        # Create DataFrame from input
+        new_data = pd.DataFrame([data])
+
+        # Encode categorical columns using label_encoders_5
+        for col in CATEGORICAL_COLS:
+            new_data[col] = label_encoders_5[col].transform(new_data[col])
+
+        # Reorder columns to match training order
+        new_data = new_data[ONLINE_SHOPPERS_FEATURES]
+
+        # Scale features using scaler_5
+        new_data_scaled = scaler_5.transform(new_data)
+
+        # Make prediction
+        prediction = random_forest_classifier.predict(new_data_scaled)[0]
+
+        return jsonify({
+            'model': 'Random Forest Classifier',
+            'prediction': int(prediction),
+            'interpretation': 'Purchase' if prediction == 1 else 'No Purchase'
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# Sample cURL for Random Forest:
+# curl -X POST http://127.0.0.1:5000/api/v1/models/random-forest-classifier/predictions \
+#   -H "Content-Type: application/json" \
+#   -d '{"Administrative": 2, "Administrative_Duration": 50.0, "Informational": 0, "Informational_Duration": 0.0, "ProductRelated": 20, "ProductRelated_Duration": 400.0, "BounceRates": 0.02, "ExitRates": 0.05, "PageValues": 0.0, "SpecialDay": 0.0, "Month": "Nov", "OperatingSystems": 2, "Browser": 1, "Region": 1, "TrafficType": 2, "VisitorType": "Returning_Visitor", "Weekend": "False"}'
+
+
+# =============================================================================
+# Product Recommender using Association Rules
+# =============================================================================
+
+@app.route('/api/v1/recommender/products', methods=['POST'])
+def recommend_products():
+    """Product recommender based on association rules from groceries dataset"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No input data provided'}), 400
+
+        if 'products' not in data:
+            return jsonify({'error': 'Missing required field: products'}), 400
+
+        input_products = set(data['products'])
+
+        if not input_products:
+            return jsonify({'error': 'Products list cannot be empty'}), 400
+
+        # Find matching rules where antecedents are subset of input products
+        recommendations = []
+        for rule in association_rules:
+            antecedents = set(rule['antecedents'])
+            # Check if all antecedents are in the input products
+            if antecedents.issubset(input_products):
+                for consequent in rule['consequents']:
+                    # Don't recommend products already in the cart
+                    if consequent not in input_products:
+                        recommendations.append({
+                            'product': consequent,
+                            'confidence': rule['confidence'],
+                            'lift': rule['lift'],
+                            'support': rule['support'],
+                            'based_on': list(antecedents)
+                        })
+
+        # Sort by lift (highest first) and remove duplicates
+        seen = set()
+        unique_recommendations = []
+        for rec in sorted(recommendations, key=lambda x: x['lift'], reverse=True):
+            if rec['product'] not in seen:
+                seen.add(rec['product'])
+                unique_recommendations.append(rec)
+
+        return jsonify({
+            'input_products': list(input_products),
+            'recommendations': unique_recommendations,
+            'count': len(unique_recommendations)
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# Sample cURL for Product Recommender:
+# curl -X POST http://127.0.0.1:5000/api/v1/recommender/products \
+#   -H "Content-Type: application/json" \
+#   -d '{"products": ["whole milk", "yogurt"]}'
+
 
 # This ensures the Flask web server only starts when you run this file directly
 # (e.g., `python api.py`), and not if you import api.py from another script or test.

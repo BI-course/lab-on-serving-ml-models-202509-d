@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Recommender - Association Rules</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            max-width: 600px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        .recommendation {
+            padding: 8px 12px;
+            margin: 5px 0;
+            background-color: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+            border-radius: 3px;
+        }
+        .no-recommendations {
+            color: #666;
+            font-style: italic;
+        }
+        .selected-products {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fff3e0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Product Recommender</h2>
+<p>Select products in your cart to get recommendations based on association rules (Groceries Dataset)</p>
+
+<form id="recommendForm">
+    <div class="form-group">
+        <label>Select Products in Cart:</label>
+        <div class="checkbox-group">
+            <div class="checkbox-item">
+                <input type="checkbox" id="whole_milk" name="products" value="whole milk">
+                <label for="whole_milk">Whole Milk</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="yogurt" name="products" value="yogurt">
+                <label for="yogurt">Yogurt</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="other_vegetables" name="products" value="other vegetables">
+                <label for="other_vegetables">Other Vegetables</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="root_vegetables" name="products" value="root vegetables">
+                <label for="root_vegetables">Root Vegetables</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="tropical_fruit" name="products" value="tropical fruit">
+                <label for="tropical_fruit">Tropical Fruit</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="citrus_fruit" name="products" value="citrus fruit">
+                <label for="citrus_fruit">Citrus Fruit</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="rolls_buns" name="products" value="rolls/buns">
+                <label for="rolls_buns">Rolls/Buns</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="soda" name="products" value="soda">
+                <label for="soda">Soda</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="bottled_water" name="products" value="bottled water">
+                <label for="bottled_water">Bottled Water</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="coffee" name="products" value="coffee">
+                <label for="coffee">Coffee</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="selected-products" id="selectedProducts">
+        <strong>Selected:</strong> <span id="selectedList">None</span>
+    </div>
+
+    <button type="submit">Get Recommendations</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+    // Update selected products display
+    document.querySelectorAll('input[name="products"]').forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedDisplay);
+    });
+
+    function updateSelectedDisplay() {
+        const selected = Array.from(document.querySelectorAll('input[name="products"]:checked'))
+            .map(cb => cb.value);
+        document.getElementById('selectedList').textContent =
+            selected.length > 0 ? selected.join(', ') : 'None';
+    }
+
+    document.getElementById('recommendForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const selectedProducts = Array.from(document.querySelectorAll('input[name="products"]:checked'))
+            .map(checkbox => checkbox.value);
+
+        if (selectedProducts.length === 0) {
+            document.getElementById('result').innerHTML =
+                '<p class="no-recommendations">Please select at least one product.</p>';
+            return;
+        }
+
+        const data = {
+            products: selectedProducts
+        };
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/v1/recommender/products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (result.error) {
+                document.getElementById('result').innerHTML = '<strong>Error:</strong> ' + result.error;
+            } else if (result.recommendations && result.recommendations.length > 0) {
+                let html = '<h3>Recommended Products:</h3>';
+                result.recommendations.forEach(rec => {
+                    html += `<div class="recommendation">
+                        <strong>${rec.product}</strong><br>
+                        <small>Confidence: ${(rec.confidence * 100).toFixed(1)}% | Lift: ${rec.lift.toFixed(2)}</small>
+                    </div>`;
+                });
+                document.getElementById('result').innerHTML = html;
+            } else {
+                document.getElementById('result').innerHTML =
+                    '<p class="no-recommendations">No recommendations found for the selected products.</p>';
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('result').innerText = 'An error occurred while getting recommendations.';
+        }
+    });
+</script>
+
+</body>
+</html>

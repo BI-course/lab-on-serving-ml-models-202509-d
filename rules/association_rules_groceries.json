@@ -1,0 +1,72 @@
+[
+    {
+      "antecedents": ["whole milk"],
+      "consequents": ["yogurt"],
+      "support": 0.056,
+      "confidence": 0.401,
+      "lift": 2.303
+    },
+    {
+      "antecedents": ["whole milk"],
+      "consequents": ["other vegetables"],
+      "support": 0.075,
+      "confidence": 0.452,
+      "lift": 2.334
+    },
+    {
+      "antecedents": ["whole milk", "other vegetables"],
+      "consequents": ["rolls/buns"],
+      "support": 0.023,
+      "confidence": 0.309,
+      "lift": 1.681
+    },
+    {
+      "antecedents": ["yogurt"],
+      "consequents": ["whole milk"],
+      "support": 0.056,
+      "confidence": 0.324,
+      "lift": 2.303
+    },
+    {
+      "antecedents": ["root vegetables"],
+      "consequents": ["whole milk"],
+      "support": 0.048,
+      "confidence": 0.448,
+      "lift": 3.184
+    },
+    {
+      "antecedents": ["root vegetables", "whole milk"],
+      "consequents": ["other vegetables"],
+      "support": 0.029,
+      "confidence": 0.491,
+      "lift": 2.537
+    },
+    {
+      "antecedents": ["citrus fruit"],
+      "consequents": ["tropical fruit"],
+      "support": 0.018,
+      "confidence": 0.287,
+      "lift": 2.043
+    },
+    {
+      "antecedents": ["tropical fruit"],
+      "consequents": ["whole milk"],
+      "support": 0.042,
+      "confidence": 0.403,
+      "lift": 2.867
+    },
+    {
+      "antecedents": ["soda"],
+      "consequents": ["bottled water"],
+      "support": 0.021,
+      "confidence": 0.218,
+      "lift": 1.709
+    },
+    {
+      "antecedents": ["coffee"],
+      "consequents": ["whole milk"],
+      "support": 0.017,
+      "confidence": 0.338,
+      "lift": 2.405
+    }
+  ]
