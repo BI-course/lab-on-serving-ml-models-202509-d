@@ -31,6 +31,10 @@ ONLINE_SHOPPERS_FEATURES = [
 
 CATEGORICAL_COLS = ['Month', 'VisitorType', 'Weekend']
 
+# Valid values from label encoders (must match training data)
+VALID_MONTHS = ['Aug', 'Dec', 'Feb', 'Jul', 'June', 'Mar', 'May', 'Nov', 'Oct', 'Sep']
+VALID_VISITOR_TYPES = ['New_Visitor', 'Other', 'Returning_Visitor']
+
 # Streamlit page config
 st.set_page_config(
     page_title="ML Model Predictions",
@@ -89,15 +93,16 @@ elif model_choice == "Naive Bayes Classifier":
             exit_rates = st.number_input("Exit Rates", value=0.0, format="%.4f")
             page_values = st.number_input("Page Values", value=0.0)
             special_day = st.number_input("Special Day", value=0.0, min_value=0.0, max_value=1.0)
-            month = st.selectbox("Month", ["Jan", "Feb", "Mar", "Apr", "May", "June", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
+            month = st.selectbox("Month", VALID_MONTHS)
             operating_systems = st.number_input("Operating Systems", value=1, min_value=1)
 
         with col3:
             browser = st.number_input("Browser", value=1, min_value=1)
             region = st.number_input("Region", value=1, min_value=1)
             traffic_type = st.number_input("Traffic Type", value=1, min_value=1)
-            visitor_type = st.selectbox("Visitor Type", ["Returning_Visitor", "New_Visitor", "Other"])
-            weekend = st.selectbox("Weekend", ["TRUE", "FALSE"])
+            visitor_type = st.selectbox("Visitor Type", VALID_VISITOR_TYPES)
+            weekend_str = st.selectbox("Weekend", ["No", "Yes"])
+            weekend = weekend_str == "Yes"  # Convert to boolean
 
         submitted = st.form_submit_button("Predict")
 
@@ -151,15 +156,16 @@ elif model_choice == "SVM Classifier":
             exit_rates = st.number_input("Exit Rates", value=0.0, format="%.4f")
             page_values = st.number_input("Page Values", value=0.0)
             special_day = st.number_input("Special Day", value=0.0, min_value=0.0, max_value=1.0)
-            month = st.selectbox("Month", ["Jan", "Feb", "Mar", "Apr", "May", "June", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
+            month = st.selectbox("Month", VALID_MONTHS)
             operating_systems = st.number_input("Operating Systems", value=1, min_value=1)
 
         with col3:
             browser = st.number_input("Browser", value=1, min_value=1)
             region = st.number_input("Region", value=1, min_value=1)
             traffic_type = st.number_input("Traffic Type", value=1, min_value=1)
-            visitor_type = st.selectbox("Visitor Type", ["Returning_Visitor", "New_Visitor", "Other"])
-            weekend = st.selectbox("Weekend", ["TRUE", "FALSE"])
+            visitor_type = st.selectbox("Visitor Type", VALID_VISITOR_TYPES)
+            weekend_str = st.selectbox("Weekend", ["No", "Yes"])
+            weekend = weekend_str == "Yes"  # Convert to boolean
 
         submitted = st.form_submit_button("Predict")
 
@@ -214,15 +220,16 @@ elif model_choice == "Random Forest Classifier":
             exit_rates = st.number_input("Exit Rates", value=0.0, format="%.4f")
             page_values = st.number_input("Page Values", value=0.0)
             special_day = st.number_input("Special Day", value=0.0, min_value=0.0, max_value=1.0)
-            month = st.selectbox("Month", ["Jan", "Feb", "Mar", "Apr", "May", "June", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
+            month = st.selectbox("Month", VALID_MONTHS)
             operating_systems = st.number_input("Operating Systems", value=1, min_value=1)
 
         with col3:
             browser = st.number_input("Browser", value=1, min_value=1)
             region = st.number_input("Region", value=1, min_value=1)
             traffic_type = st.number_input("Traffic Type", value=1, min_value=1)
-            visitor_type = st.selectbox("Visitor Type", ["Returning_Visitor", "New_Visitor", "Other"])
-            weekend = st.selectbox("Weekend", ["TRUE", "FALSE"])
+            visitor_type = st.selectbox("Visitor Type", VALID_VISITOR_TYPES)
+            weekend_str = st.selectbox("Weekend", ["No", "Yes"])
+            weekend = weekend_str == "Yes"  # Convert to boolean
 
         submitted = st.form_submit_button("Predict")
 
