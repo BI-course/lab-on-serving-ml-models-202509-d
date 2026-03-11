@@ -8,47 +8,57 @@
 
 **Member 1:**
 
-| **Details**                                                                                                                           | **Comment** |
-|:--------------------------------------------------------------------------------------------------------------------------------------|:------------|
-| **Student ID**                                                                                                                        |             |
-| **Name**                                                                                                                              |             |
-| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** |             |
+
+| **Details**                                                                                                                           | **Comment**                                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Student ID**                                                                                                                        | 147421                                                                                                                                                                                 |
+| **Name**                                                                                                                              | Benny Macharia                                                                                                                                                                         |
+| **What part of the lab did you personally** **contribute to (provide a link to the** **branch(es)), and what did you learn from it?** | Set up and integrated code snippets from group members, and handled deployment on Streamlit (branch: `main`). Learned end-to-end API integration, dependency debugging and deployment. |
+
 
 **Member 2:**
 
-| **Details**                                                                                                                           | **Comment** |
-|:--------------------------------------------------------------------------------------------------------------------------------------|:------------|
-| **Student ID**                                                                                                                        |             |
-| **Name**                                                                                                                              |             |
-| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** |             |
+
+| **Details**                                                                                                                           | **Comment**                                                                                                                                                                                                                                                                                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Student ID**                                                                                                                        | 146898                                                                                                                                                                                                                                                                                                                               |
+| **Name**                                                                                                                              | Derek Leiro                                                                                                                                                                                                                                                                                                                          |
+| **What part of the lab did you personally** **contribute to (provide a link to the** **branch(es)), and what did you learn from it?** | Added remaining files for Naive Bayes, random forest, recommender model and SVM, deployed to streamlit under (branch: `main`). I learned deploying models to both gradio and streamlit, and how a flask frontend can be able to interact with ML models. Other things I had to overcome was dealing with bugs on a python/flask app. |
+
 
 **Member 3:**
 
-| **Details**                                                                                                                           | **Comment** |
-|:--------------------------------------------------------------------------------------------------------------------------------------|:------------|
-| **Student ID**                                                                                                                        |             |
-| **Name**                                                                                                                              |             |
-| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** |             |
+
+| **Details**                                                                                                                           | **Comment**                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Student ID**                                                                                                                        | 134859                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **Name**                                                                                                                              | Wesley Nyamu                                                                                                                                                                                                                                                                                                                                                                                                            |
+| **What part of the lab did you personally** **contribute to (provide a link to the** **branch(es)), and what did you learn from it?** | Handling secrets management, environment variables, and understanding how the Docker Compose configuration is split into separate dev and production files. I also recorded the demo video where I walked through all five models, explained how they work, and ran through the live examples. My take away was practicing separation of concerns through how configuration is properly separated from the actual code. |
+
 
 **Member 4:**
 
-| **Details**                                                                                                                           | **Comment** |
-|:--------------------------------------------------------------------------------------------------------------------------------------|:------------|
-| **Student ID**                                                                                                                        |             |
-| **Name**                                                                                                                              |             |
-| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** |             |
+
+| **Details**                                                                                                                           | **Comment**                                                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Student ID**                                                                                                                        | 150139                                                                                                                                                       |
+| **Name**                                                                                                                              | Natasha Ajiambo Obuya                                                                                                                                        |
+| **What part of the lab did you personally** **contribute to (provide a link to the** **branch(es)), and what did you learn from it?** | From implementing the API architecture using Ngingx and Gunicorn, I learnt that API design, usability and error handling is essential when training a model. |
+
 
 **Member 5:**
 
+
 | **Details**                                                                                                                           | **Comment** |
-|:--------------------------------------------------------------------------------------------------------------------------------------|:------------|
+| ------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | **Student ID**                                                                                                                        |             |
 | **Name**                                                                                                                              |             |
-| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** |             |
+| **What part of the lab did you personally** **contribute to (provide a link to the** **branch(es)), and what did you learn from it?** |             |
+
 
 ## Chosen Level of Difficulty
 
-**Specify the chosen level of difficulty** (baseline, intermediate, or advanced):
+**Specify the chosen level of difficulty** (baseline, intermediate, or advanced): advanced
 
 ## Video Demonstration
 
@@ -58,9 +68,11 @@ Note that you are required to submit the link to the video and NOT the video its
 
 **Link to the video:**
 
+[https://streamable.com/bz1mv6](https://streamable.com/bz1mv6)
+
 ## Public URL
 
-**Specify the public URL to the Gradio/Streamlit App**:
+**Specify the public URL to the Gradio/Streamlit App**: [https://lab-on-serving-ml-models-202509-d-gdjckp4lbi9sf6uyantwbw.streamlit.app/](https://lab-on-serving-ml-models-202509-d-gdjckp4lbi9sf6uyantwbw.streamlit.app/)
 
 ---
 
@@ -97,7 +109,7 @@ This API can be used by systems developed by other teams in the organization usi
   - A recommender that recommends products to a client based on the association rules created in the previous lab. The association rules should be loaded from disk.
   - A classifier that predicts the cluster to which a client belongs to. The classifier should be loaded from disk.
 
-**Note 1:** **`api.py` is NOT production-grade as it is.** It is only meant for demonstration purposes.
+**Note 1:** `**api.py` is NOT production-grade as it is.** It is only meant for demonstration purposes.
 Scalability and security must be taken into consideration before deploying an API in a production environment.
 
 **Note 2:** Students often treat the API as an afterthought, focusing only on training ML models.
@@ -115,7 +127,6 @@ The "hidden" learning here is that the delivery mechanism (API design, usability
   - K-Nearest Neighbors (kNN) classifier
   - Support Vector Machine (SVM) classifier
   - Random Forest classifier
-
 - Update [api.py](api.py) to include end-points to serve the following:
   - A recommender that recommends products to a client based on the association rules created in the previous lab
 
@@ -133,9 +144,7 @@ When you run the container, it behaves like a lightweight server.
   - Create a Dockerfile to tell Docker how to build the image (Python, install dependencies, run Gunicorn).
   - Build the Docker image: A one-time process to create a reusable package.
   - Run the container: Starts Gunicorn, serving your Flask app (runs the Flask app and handles requests).
-
 - Dockerize (wrap everything into a container that can run anywhere) your Flask API using Gunicorn to make it "production-ready". Make use of a reverse-proxy (Nginx) to shield Gunicorn from the Internet.
-
 - Why this is production-friendly
   - Portability: the same image runs anywhere (laptop, server, cloud).
   - Consistency: no “but it works on my machine” problems.
@@ -160,3 +169,4 @@ The marks also depend on the chosen level of difficulty such that:
 - Advanced (Distinction) >= 8.6 marks
 - Intermediate (Merit) 7.5–8.5 marks
 - Baseline (Pass) >= 6 marks
+
