@@ -23,7 +23,7 @@
 | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Student ID**                                                                                                                        | 146898                                                                                                                                                                                                                                                   |
 | **Name**                                                                                                                              | Derek Leiro                                                                                                                                                                                                                                              |
-| **What part of the lab did you personally** **contribute to (provide a link to the** **branch(es)), and what did you learn from it?** | Added remaining files for Naive Bayes, random forest, recommender model and SVM, deployed to streamlit under (branch: `main`). I learned deploying models to both gradio and streamlit, and how a flask frontend can be able to interact with ML models. |
+| **What part of the lab did you personally** **contribute to (provide a link to the** **branch(es)), and what did you learn from it?** | Added remaining files for Naive Bayes, random forest, recommender model and SVM, deployed to streamlit under (branch: `main`). I learned deploying models to both gradio and streamlit, and how a flask frontend can be able to interact with ML models. Other things I had to overcome was dealing with bugs on a python/flask app. |
 
 
 **Member 3:**
@@ -41,9 +41,9 @@
 
 | **Details**                                                                                                                           | **Comment** |
 | ------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| **Student ID**                                                                                                                        |             |
-| **Name**                                                                                                                              |             |
-| **What part of the lab did you personally** **contribute to (provide a link to the** **branch(es)), and what did you learn from it?** |             |
+| **Student ID**                                                                                                                        | 150139      |
+| **Name**                                                                                                                              | Natasha Ajiambo Obuya |
+| **What part of the lab did you personally** **contribute to (provide a link to the** **branch(es)), and what did you learn from it?** | From implementing the API architecture using Ngingx and Gunicorn, I learnt that API design, usability and error handling is essential when training a model. |
 
 
 **Member 5:**
