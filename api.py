@@ -393,6 +393,110 @@ def predict_knn_classifier():
     return jsonify({"Predicted Class = ": int(prediction)})
 
 
+# =============================================================================
+# Additional Frontend-Compatible Endpoints (from derek branch)
+# =============================================================================
+
+# Categorical columns that need encoding
+CATEGORICAL_COLS = ['Month', 'VisitorType', 'Weekend']
+
+# Aliases for frontend-compatible endpoints
+naive_bayes_classifier = naive_bayes_classifier_optimum
+svm_classifier = support_vector_classifier_optimum
+random_forest_classifier = random_forest_classifier_optimum
+association_rules = ASSOCIATION_RULES
+
+
+@app.route('/api/v1/models/svm-classifier/predictions', methods=['POST'])
+def predict_svm():
+    """Support Vector Machine classifier for Online Shoppers Purchasing Intention"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No input data provided'}), 400
+
+        # Check for missing required fields
+        missing = [f for f in ONLINE_SHOPPERS_FEATURES if f not in data]
+        if missing:
+            return jsonify({'error': f'Missing required fields: {missing}'}), 400
+
+        # Create DataFrame from input
+        new_data = pd.DataFrame([data])
+
+        # Encode categorical columns using label_encoders_4
+        for col in CATEGORICAL_COLS:
+            new_data[col] = label_encoders_4[col].transform(new_data[col])
+
+        # Reorder columns to match training order
+        new_data = new_data[ONLINE_SHOPPERS_FEATURES]
+
+        # Scale features using scaler_4
+        new_data_scaled = scaler_4.transform(new_data)
+
+        # Make prediction
+        prediction = svm_classifier.predict(new_data_scaled)[0]
+
+        return jsonify({
+            'model': 'Support Vector Machine Classifier',
+            'prediction': int(prediction),
+            'interpretation': 'Purchase' if prediction == 1 else 'No Purchase'
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/v1/recommender/products', methods=['POST'])
+def recommend_products():
+    """Product recommender based on association rules from groceries dataset"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No input data provided'}), 400
+
+        if 'products' not in data:
+            return jsonify({'error': 'Missing required field: products'}), 400
+
+        input_products = set(data['products'])
+
+        if not input_products:
+            return jsonify({'error': 'Products list cannot be empty'}), 400
+
+        # Find matching rules where antecedents are subset of input products
+        recommendations = []
+        for rule in association_rules:
+            antecedents = set(rule['antecedents'])
+            # Check if all antecedents are in the input products
+            if antecedents.issubset(input_products):
+                for consequent in rule['consequents']:
+                    # Don't recommend products already in the cart
+                    if consequent not in input_products:
+                        recommendations.append({
+                            'product': consequent,
+                            'confidence': rule['confidence'],
+                            'lift': rule['lift'],
+                            'support': rule['support'],
+                            'based_on': list(antecedents)
+                        })
+
+        # Sort by lift (highest first) and remove duplicates
+        seen = set()
+        unique_recommendations = []
+        for rec in sorted(recommendations, key=lambda x: x['lift'], reverse=True):
+            if rec['product'] not in seen:
+                seen.add(rec['product'])
+                unique_recommendations.append(rec)
+
+        return jsonify({
+            'input_products': list(input_products),
+            'recommendations': unique_recommendations,
+            'count': len(unique_recommendations)
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route(
     "/api/v1/models/support-vector-classifier/predictions", methods=["POST"]
 )

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SVM Classifier - Predict Purchase Intent</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            max-width: 600px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="number"], input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #9C27B0;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #7B1FA2;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        .section-title {
+            margin-top: 20px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #9C27B0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Predict Purchase Intent using Support Vector Machine Classifier</h2>
+<p>Online Shoppers Purchasing Intention Dataset</p>
+
+<form id="predictForm">
+    <h3 class="section-title">Page View Metrics</h3>
+
+    <div class="form-group">
+        <label for="Administrative">Administrative Pages Viewed:</label>
+        <input type="number" id="Administrative" name="Administrative" value="2" required>
+    </div>
+
+    <div class="form-group">
+        <label for="Administrative_Duration">Administrative Duration (seconds):</label>
+        <input type="number" id="Administrative_Duration" name="Administrative_Duration" step="0.01" value="50.0" required>
+    </div>
+
+    <div class="form-group">
+        <label for="Informational">Informational Pages Viewed:</label>
+        <input type="number" id="Informational" name="Informational" value="0" required>
+    </div>
+
+    <div class="form-group">
+        <label for="Informational_Duration">Informational Duration (seconds):</label>
+        <input type="number" id="Informational_Duration" name="Informational_Duration" step="0.01" value="0.0" required>
+    </div>
+
+    <div class="form-group">
+        <label for="ProductRelated">Product Related Pages Viewed:</label>
+        <input type="number" id="ProductRelated" name="ProductRelated" value="20" required>
+    </div>
+
+    <div class="form-group">
+        <label for="ProductRelated_Duration">Product Related Duration (seconds):</label>
+        <input type="number" id="ProductRelated_Duration" name="ProductRelated_Duration" step="0.01" value="400.0" required>
+    </div>
+
+    <h3 class="section-title">Session Metrics</h3>
+
+    <div class="form-group">
+        <label for="BounceRates">Bounce Rate (0-1):</label>
+        <input type="number" id="BounceRates" name="BounceRates" step="0.001" value="0.02" required>
+    </div>
+
+    <div class="form-group">
+        <label for="ExitRates">Exit Rate (0-1):</label>
+        <input type="number" id="ExitRates" name="ExitRates" step="0.001" value="0.05" required>
+    </div>
+
+    <div class="form-group">
+        <label for="PageValues">Page Values:</label>
+        <input type="number" id="PageValues" name="PageValues" step="0.01" value="0.0" required>
+    </div>
+
+    <div class="form-group">
+        <label for="SpecialDay">Special Day (0-1):</label>
+        <input type="number" id="SpecialDay" name="SpecialDay" step="0.1" value="0.0" required>
+    </div>
+
+    <h3 class="section-title">User Information</h3>
+
+    <div class="form-group">
+        <label for="Month">Month:</label>
+        <select id="Month" name="Month" required>
+            <option value="Jan">January</option>
+            <option value="Feb">February</option>
+            <option value="Mar">March</option>
+            <option value="Apr">April</option>
+            <option value="May">May</option>
+            <option value="Jun">June</option>
+            <option value="Jul">July</option>
+            <option value="Aug">August</option>
+            <option value="Sep">September</option>
+            <option value="Oct">October</option>
+            <option value="Nov" selected>November</option>
+            <option value="Dec">December</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="OperatingSystems">Operating System:</label>
+        <input type="number" id="OperatingSystems" name="OperatingSystems" value="2" required>
+    </div>
+
+    <div class="form-group">
+        <label for="Browser">Browser:</label>
+        <input type="number" id="Browser" name="Browser" value="1" required>
+    </div>
+
+    <div class="form-group">
+        <label for="Region">Region:</label>
+        <input type="number" id="Region" name="Region" value="1" required>
+    </div>
+
+    <div class="form-group">
+        <label for="TrafficType">Traffic Type:</label>
+        <input type="number" id="TrafficType" name="TrafficType" value="2" required>
+    </div>
+
+    <div class="form-group">
+        <label for="VisitorType">Visitor Type:</label>
+        <select id="VisitorType" name="VisitorType" required>
+            <option value="Returning_Visitor" selected>Returning Visitor</option>
+            <option value="New_Visitor">New Visitor</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="Weekend">Weekend:</label>
+        <select id="Weekend" name="Weekend" required>
+            <option value="False" selected>No (Weekday)</option>
+            <option value="True">Yes (Weekend)</option>
+        </select>
+    </div>
+
+    <button type="submit">Predict Purchase Intent</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+    document.getElementById('predictForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const data = {
+            Administrative: parseInt(document.getElementById('Administrative').value),
+            Administrative_Duration: parseFloat(document.getElementById('Administrative_Duration').value),
+            Informational: parseInt(document.getElementById('Informational').value),
+            Informational_Duration: parseFloat(document.getElementById('Informational_Duration').value),
+            ProductRelated: parseInt(document.getElementById('ProductRelated').value),
+            ProductRelated_Duration: parseFloat(document.getElementById('ProductRelated_Duration').value),
+            BounceRates: parseFloat(document.getElementById('BounceRates').value),
+            ExitRates: parseFloat(document.getElementById('ExitRates').value),
+            PageValues: parseFloat(document.getElementById('PageValues').value),
+            SpecialDay: parseFloat(document.getElementById('SpecialDay').value),
+            Month: document.getElementById('Month').value,
+            OperatingSystems: parseInt(document.getElementById('OperatingSystems').value),
+            Browser: parseInt(document.getElementById('Browser').value),
+            Region: parseInt(document.getElementById('Region').value),
+            TrafficType: parseInt(document.getElementById('TrafficType').value),
+            VisitorType: document.getElementById('VisitorType').value,
+            Weekend: document.getElementById('Weekend').value
+        };
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/v1/models/svm-classifier/predictions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (result.error) {
+                document.getElementById('result').innerHTML = '<strong>Error:</strong> ' + result.error;
+            } else {
+                document.getElementById('result').innerHTML =
+                    '<strong>Model:</strong> ' + result.model + '<br>' +
+                    '<strong>Prediction:</strong> ' + result.prediction + '<br>' +
+                    '<strong>Interpretation:</strong> ' + result.interpretation;
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('result').innerText = 'An error occurred while making the prediction.';
+        }
+    });
+</script>
+
+</body>
+</html>
